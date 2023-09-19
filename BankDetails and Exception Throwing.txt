@@ -1,0 +1,417 @@
+package bnk.edu.bnkpro.model;
+
+
+public class Account {
+	private int accountId;
+	private String accountHolderName;
+	private int bankBalance;
+	private String location;
+	
+	public Account() {
+		accountHolderName = "Not Set";
+		accountId = 0;
+		bankBalance = 0;
+		location = "Not Set";
+	}
+
+	
+	public Account(int accountId, String accountHolderName, int bankBalance, String location) {
+		super();
+		this.accountId = accountId;
+		this.accountHolderName = accountHolderName;
+		this.bankBalance = bankBalance;
+		this.location = location;
+	}
+
+	
+
+	/**
+	 * @return the accountId
+	 */
+	public int getAccountId() {
+		return accountId;
+	}
+
+
+	/**
+	 * @param accountId the accountId to set
+	 */
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+
+
+	/**
+	 * @return the accountHolderName
+	 */
+	public String getAccountHolderName() {
+		return accountHolderName;
+	}
+
+
+	/**
+	 * @param accountHolderName the accountHolderName to set
+	 */
+	public void setAccountHolderName(String accountHolderName) {
+		this.accountHolderName = accountHolderName;
+	}
+
+
+	/**
+	 * @return the bankBalance
+	 */
+	public int getBankBalance() {
+		return bankBalance;
+	}
+
+
+	/**
+	 * @param bankBalance the bankBalance to set
+	 */
+	public void setBankBalance(int bankBalance) {
+		this.bankBalance = bankBalance;
+	}
+
+
+	/**
+	 * @return the location
+	 */
+	public String getLocation() {
+		return location;
+	}
+
+
+	/**
+	 * @param location the location to set
+	 */
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
+
+	@Override
+	public int hashCode() {
+		// TODO Auto-generated method stub
+		return (int)(Math.random()*10000000);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Account)
+		{
+			Account acc = (Account) obj;
+			
+			boolean b1 = this.accountHolderName.equals(acc.accountHolderName);
+			 boolean b2 = this.accountId == acc.accountId;
+			boolean b3 = this.bankBalance == acc.bankBalance;
+			boolean b4 = this.location.equals(acc.location);
+			return b1&&b3&&b4;
+		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return super.toString();
+	}
+	
+	public int deposit(int amount) {
+		this.bankBalance += amount;
+		return this.bankBalance;
+	}
+	public int withdraw(int amount)throws InsufficientBalanceException{
+		if((this.bankBalance-amount)>=5000) {
+			this.bankBalance-=amount;
+			return this.bankBalance;
+		}
+		else {
+			throw new InsufficientBalanceException();
+		}
+	}
+	public int[] fundTransferTo(int amount, Account a)throws InsufficientBalanceException{
+		if((this.bankBalance-amount)>=5000) {
+			this.bankBalance-=amount;
+			a.bankBalance+=amount;
+			int[] arr = {this.bankBalance,a.bankBalance};
+			return arr;
+		}
+		else {
+			throw new InsufficientBalanceException();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+}
+package bnk.edu.bnkpro.model;
+
+public class InsufficientBalanceException extends Exception {
+
+}
+package bnk.edu.bnkpro.db;
+
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+
+import bnk.edu.bnkpro.model.Account;
+
+public class CustomerAccountsDB {
+	
+	Set<Account> accountList = new LinkedHashSet<>();
+	
+	public int insertAccount(Account a)throws AccountAlreadyExistsException{
+		for(Account b:accountList) {
+			if(a.equals(b)) {
+				throw new AccountAlreadyExistsException();
+			}
+		}
+        boolean status = accountList.add(a);
+        
+        return status?a.getAccountId():-1;
+	}
+	public Account getAccountById(int id)throws NoSuchAccountException{
+		Account idMatched = null;
+		for(Account a:accountList) {
+			if(a.getAccountId()==id) {
+				idMatched =a;
+			}
+		}
+		if(idMatched == null) {
+			throw new NoSuchAccountException();
+		}
+		else {
+			return idMatched;
+		}
+	}
+	public Set<Account>getAllAccounts(){
+		return accountList;
+	}
+		
+	}
+package bnk.edu.bnkpro.db;
+
+public class AccountAlreadyExistsException extends Exception {
+
+}
+package bnk.edu.bnkpro.db;
+
+public class NoSuchAccountException extends Exception {
+	public String getMessage() {
+		return "No such Account found";
+	}
+
+}
+public AccountServer() {
+		db = new CustomerAccountsDB();
+	}
+	public String insertAccount(Account a) {
+		int fromDBId = -1;
+		try {
+			fromDBId = db.insertAccount(a);
+		}
+		catch(AccountAlreadyExistsException e) {
+			System.out.println("This Account already exist!");
+		}
+		if(fromDBId !=-1) {
+			return "new account added,account id is :"+fromDBId;
+		}
+		return "Account not added,please check entered info";
+	}
+	public Account getByAccountId(int id) {
+		Account a;
+		try {
+			a = db.getAccountById(id);
+			return a;
+		}
+		catch(NoSuchAccountException e) {
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
+	public Set<Account> getAllAccounts(){
+		return db.getAllAccounts();
+	}
+				
+				
+				
+		
+	
+
+}
+package bnk.edu.bnkpro.ui;
+
+import java.util.Set;
+import java.util.Random;
+import java.util.Scanner;
+
+import bnk.edu.bnkpro.model.Account;
+import bnk.edu.bnkpro.service.AccountServer;
+import bnk.edu.bnkpro.model.InsufficientBalanceException;
+
+public class BankApp {
+	
+	Scanner sc = new Scanner(System.in);
+	AccountServer server;
+	
+	public BankApp() {
+		server = new AccountServer();
+	}
+	public static void main(String[] args) {
+		BankApp app = new BankApp();
+		while(true) {
+			System.out.println("----------Operations-------");
+			System.out.println("1. Add Account");
+			System.out.println("2.Display Account Details using ID");
+			System.out.println("3. Deposit");
+			System.out.println("4.Withdraw");
+			System.out.println("5.Get Accounts By Location");
+			System.out.println("6.Get Accounts By Balance Range");
+			System.out.println("7.Transfer funds");
+			System.out.println("0.Exit");
+			System.out.println("Enter Options : -");
+			
+			switch(new Scanner(System.in).nextInt()) {
+			
+			case 1:
+				app.fillAccountForm();
+				break;
+			case 2:
+				app.getAccountBasedOnId();
+				break;
+			case 3:
+				app.deposit();
+				break;
+			case 4:
+				app.withdraw();
+				break;
+			case 5:
+				app.getAllLocation();
+				break;
+			case 6:
+				app.getAllByBalanceRange();
+				break;
+			case 7:
+				app.fundTransferTo();
+				break;
+			case 0:
+				System.exit(0);
+			}//endswitch
+			System.out.println("--------\n-------");
+		}//endwhile
+	}//endmain
+	
+	public void fillAccountForm() {
+		System.out.println("Enter AccountHolderName: ");
+		String name = sc.nextLine();
+		
+		System.out.println("Enter initial balance : ");
+		int balance =0;
+		try {
+			balance = Integer.parseInt(sc.nextLine());
+		}
+		catch(NumberFormatException e) {
+			System.out.println("invalid balance input!your account will open with zero balance.");
+		}
+		System.out.println("Enter the Location:");
+		String location = sc.nextLine();
+	
+		
+		int id = new Random().nextInt(1000);
+		
+		Account a = new Account(id,name,balance,location);
+		String notification = server.insertAccount(a);
+		System.out.println("Notification :- "+ notification);
+	}
+	public void displayAccount(Account a) {
+		System.out.println(a.getAccountId()+" "+a.getAccountHolderName()+" "+a.getLocation());
+		System.out.println("\n");
+	}
+	public void getAccountBasedOnId() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("enter customer id : ");
+		int id = Integer.parseInt(sc.nextLine());
+		Account a = server.getByAccountId(id);
+		if(a!=null) {
+			System.out.println("AccountID:"+a.getAccountId()+"CustomerName:"+a.getAccountHolderName()+"Balance:"+a.getBankBalance()+"Location:"+a.getLocation());
+			
+		}
+		
+	}
+	public void deposit() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the account id");
+		int id = Integer.parseInt(sc.nextLine());
+		Account acc = server.getByAccountId(id);
+		System.out.println("enter the amount to be deposited!");
+		int depositAmt = Integer.parseInt(sc.nextLine());
+		int newBalance = acc.deposit(depositAmt);
+		System.out.println("The new balance:"+newBalance);
+		}
+	public void withdraw() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the account id : ");
+		int id = Integer.parseInt(sc.nextLine());
+		Account acc = server.getByAccountId(id);
+		System.out.println("enter the amount to be withdraw!");
+		int withdrawAmt = Integer.parseInt(sc.nextLine());
+		int newBalance = acc.getBankBalance();
+		try {
+			newBalance = acc.withdraw(withdrawAmt);
+			System.out.println("The new balance is:"+newBalance+"amount withdrawn:"+"available balance is:"+newBalance);
+		}
+		catch(InsufficientBalanceException n) {
+			System.out.println("InsufficientBalance!amount:"+withdrawAmt+"cannot be withdrawn"+"available balance is:"+newBalance);
+		}
+	}
+	public void fundTransferTo() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the account id to transfer from: ");
+		int fromId = Integer.parseInt(sc.nextLine());
+		Account acc = server.getByAccountId(fromId);
+		int toId = Integer.parseInt(sc.nextLine());
+		Account acc2 = server.getByAccountId(fromId);
+		System.out.println("enter the account id to transfer to:");
+		int transferAmt = Integer.parseInt(sc.nextLine());
+		int newBalance1 = acc.getBankBalance();
+		int newBalance2 = acc2.getBankBalance();
+		try {
+			int[] balance = acc.fundTransferTo(transferAmt, acc2);
+			System.out.println("The new balance of Account"+acc+"is:"+balance[0]+"new balance of Account"+acc2+"is:"+balance[1]+"amount transfered:"+transferAmt);
+			
+		}
+		catch(InsufficientBalanceException n) {
+			System.out.println("InsufficientBalanceException!amount:"+transferAmt+"cannot be withdrawn"+"available balance is:"+newBalance1);
+		}
+	}
+	
+	private void getAllLocation() {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Enter the location:");
+		String location = sc.nextLine();
+		Set<Account>acc = server.getAllAccounts();
+		for(Account a:acc) {
+			if(a.getLocation().equals(location)) {
+				displayAccount(a);
+			}
+		}
+	}
+	private void getAllByBalanceRange() {
+		Scanner sc =new Scanner(System.in);
+		System.out.println("Enter the Minimum Balance:");
+		int fromBalance = Integer.parseInt(sc.nextLine());
+		int toBalance = Integer.parseInt(sc.nextLine());
+		Set<Account>acc = server.getAllAccounts();
+		for(Account a:acc) {
+			if(a.getBankBalance()>fromBalance&&a.getBankBalance()<toBalance) {
+				displayAccount(a);
+			}
+		}
+	}
+}
