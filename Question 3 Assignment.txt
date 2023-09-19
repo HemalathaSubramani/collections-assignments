@@ -1,0 +1,318 @@
+public class Account {
+	
+		
+		private int accountId;
+		private String accountHolderName;
+		private int salary;
+		private String location;
+		
+		public Account() {
+			accountHolderName = "Not Set";
+			accountId = 0;
+			salary = 0;
+			location = "Not Set";
+		}
+
+		
+		public Account(int accountId, String accountHolderName, int salary, String location) {
+			super();
+			this.accountId = accountId;
+			this.accountHolderName = accountHolderName;
+			this.salary = salary;
+			this.location = location;
+		}
+
+		
+
+		/**
+		 * @return the accountId
+		 */
+		public int getAccountId() {
+			return accountId;
+		}
+
+
+		/**
+		 * @param accountId the accountId to set
+		 */
+		public void setAccountId(int accountId) {
+			this.accountId = accountId;
+		}
+
+
+		/**
+		 * @return the accountHolderName
+		 */
+		public String getAccountHolderName() {
+			return accountHolderName;
+		}
+
+
+		/**
+		 * @param accountHolderName the accountHolderName to set
+		 */
+		public void setAccountHolderName(String accountHolderName) {
+			this.accountHolderName = accountHolderName;
+		}
+
+
+		/**
+		 * @return the bankBalance
+		 */
+		public int getSalary() {
+			return salary;
+		}
+
+
+		/**
+		 * @param bankBalance the bankBalance to set
+		 */
+		public void setSalary(int salary) {
+			this.salary = salary;
+		}
+
+
+		/**
+		 * @return the location
+		 */
+		public String getLocation() {
+			return location;
+		}
+
+
+		@Override
+		public int hashCode() {
+			// TODO Auto-generated method stub
+			return accountId *3/2;
+		}
+
+
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Account)
+			{
+				Account acc = (Account) obj;
+				
+				boolean b1 = this.accountHolderName.equals(acc.accountHolderName);
+				 boolean b2 = this.accountId == acc.accountId;
+				boolean b3 = this.salary == acc.salary;
+				boolean b4 = this.location.equals(acc.location);
+				return b1&&b3&&b4;
+			}
+			return false;
+		}
+
+
+		/**
+		 * @param location the location to set
+		 */
+		public void setSalary(String Salary) {
+			this.salary = salary;
+		}
+
+
+		@Override
+
+		public String toString() {
+
+			return "Account [accountid=" + accountId + ", accountHolderName=" + accountHolderName + ", Salary`="
+
+					+ salary + ", location=" + location + "]";
+
+		}
+
+
+
+}
+
+
+
+package Question3;
+
+
+	import java.util.ArrayList;
+import java.util.HashMap;
+
+	import java.util.List;
+
+	import java.util.Map;
+
+	import java.util.Scanner;
+
+import Question2.Account;
+
+	 
+
+	
+
+	 
+
+	public class ListMapDemo {
+
+		public static void main(String[] args) {
+
+	 
+
+			
+
+	 
+
+			Account a1 = new Account(123,"jawahar",2000,"bangalore");
+
+	 
+
+			Account a2 = new Account(234,"varun",3000,"chennai");
+
+	 
+
+			Account a3 = new Account(456,"dinesh",5000,"mumbai");
+
+	 
+
+			Account a4 = new Account(567,"thinesh",4500,"coimbatore");
+
+	 
+
+			Account a5 = new Account(345,"dharani",7688,"bangalore");
+
+	 
+
+			Account a6 = new Account(888,"harish",9876,"bangalore");
+
+	 
+
+			  Map<Integer,Account> accountMap = new HashMap<>();
+
+	 
+
+			  accountMap.put(a1.getAccountId(), a1);
+
+	 
+
+			  accountMap.put(a2.getAccountId(), a2);
+
+	 
+
+			  accountMap.put(a3.getAccountId(), a3);
+
+	 
+
+			  accountMap.put(a4.getAccountId(), a4);
+
+			  accountMap.put(a5.getAccountId(), a5);
+
+	 
+
+			  Scanner sc = new Scanner(System.in);
+
+	 
+
+			  System.out.println("Enter key to get account details");
+
+	 
+
+			  int key = sc.nextInt();
+
+	 
+
+			 Account acc = accountMap.get(key);
+
+	 
+
+	 
+
+	 
+
+			  System.out.println(acc.toString());
+
+	 
+
+	 
+
+	 
+
+			  System.out.println("Enter location to get account details");
+
+	 
+
+	 
+
+	 
+
+			  String location = sc.next();
+
+	 
+
+	 
+
+	 
+
+			  Map<String,List<Account>> newAccount = new HashMap<>();
+
+	 
+
+	 
+
+	 
+
+			  List<Account> accountList = new ArrayList<>();
+
+	 
+
+	 
+
+	 
+
+			  for(Map.Entry<Integer, Account> e : accountMap.entrySet()) {
+
+	 
+
+	 
+
+	 
+
+				  if(e.getValue().getLocation().equals(location)) {
+
+	 
+
+	 
+
+	 
+
+					  accountList.add(e.getValue());
+
+	 
+
+	 
+
+	 
+
+				  }
+
+	 
+
+	 
+
+	 
+
+			  }
+
+	 
+
+			  newAccount.put(location, accountList);
+
+			  System.out.println(newAccount+"    ");
+
+	 
+
+	 
+
+	 
+
+		}
+
+	}
+
+	 
+
+
