@@ -1,0 +1,210 @@
+package p1;
+
+
+
+public class Account implements Comparable<Account> {
+        private int accountId;
+		private String accountHolderName;
+		private int bankBalance;
+		private String location;
+		
+		public Account() {
+			accountHolderName = "Not Set";
+			accountId = 0;
+			bankBalance = 0;
+			location = "Not Set";
+		}
+
+		
+		public Account(int accountId, String accountHolderName, int bankBalance, String location) {
+			super();
+			this.accountId = accountId;
+			this.accountHolderName = accountHolderName;
+			this.bankBalance = bankBalance;
+			this.location = location;
+		}
+
+		
+		public int getAccountId() {
+			return accountId;
+		}
+
+		public void setAccountId(int accountId) {
+			this.accountId = accountId;
+		}
+
+		public String getAccountHolderName() {
+			return accountHolderName;
+		}
+
+		public void setAccountHolderName(String accountHolderName) {
+			this.accountHolderName = accountHolderName;
+		}
+		public int getBankBalance() {
+			return bankBalance;
+		}
+
+		public void setBankBalance(int bankBalance) {
+			this.bankBalance = bankBalance;
+		}
+
+		public String getLocation() {
+			return location;
+		}
+
+
+		@Override
+		public int hashCode() {
+			return accountId+bankBalance *3+3;
+					}
+
+
+		@Override
+		public boolean equals(Object obj) {
+			if(obj instanceof Account)
+			{
+				Account acc = (Account) obj;
+				
+				boolean b1 = this.accountHolderName.equals(acc.accountHolderName);
+				 boolean b2 = this.accountId == acc.accountId;
+				boolean b3 = this.bankBalance == acc.bankBalance;
+				boolean b4 = this.location.equals(acc.location);
+				return b1&&b3&&b4;
+			}
+			return false;
+		}
+			
+		
+
+
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return "AccountID: "+this.accountId+" AccountHolder Name: "+this.accountHolderName+" Bank Balance: "+this.bankBalance+" Location: "+this.location;
+		}
+		@Override
+		public int compareTo(Account account) {
+			return Integer.compare(this.accountId,account.accountId);
+		
+		}
+		
+		
+}
+
+
+package p1;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.TreeSet;
+
+public class AccountApp {
+	public static void main(String[] args) {
+		TreeSet<Account> allAccounts = new TreeSet<>();
+		
+		
+		Account a1 = new Account(123,"hema",4500,"chennai");
+		Account a2 = new Account(111,"vinda",1000,"mumbai");
+		Account a3 = new Account(563,"jaya",3340,"kerala");
+		Account a4 = new Account(222,"latha",1500,"chennai");
+		Account a5 = new Account(987,"mala",890,"trichy");
+		
+		allAccounts.add(a1);
+		allAccounts.add(a2);
+		allAccounts.add(a3);
+		allAccounts.add(a4);
+		allAccounts.add(a5);
+		System.out.println("------------default sort on AccountId----------");
+		for (Account account : allAccounts) {
+			System.out.println(account);
+			System.out.println();
+		}
+			System.out.println("---  Accounts (HighToLow)  ----------");
+			getAccountsBasedOnBankBalanceHighToLow(allAccounts);
+			System.out.println();
+			
+			System.out.println("---  Accounts (LowToHigh)  ----------");
+			getAccountsBasedOnBankBalanceLowToHigh(allAccounts);
+			System.out.println();
+			
+			
+			
+		}
+		
+
+		
+		public static void getAccountsBasedOnBankBalanceHighToLow(TreeSet<Account> allAccounts)
+		{
+			// Step1 -> convert set to List
+			List<Account> tempList = new ArrayList<>();// or pass as constructor argument
+			tempList.addAll(allAccounts);
+			
+			// Step 2-> create Comparator class Object
+			SortAccountBasedOnBankBalanceHighToLow sortCode = new SortAccountBasedOnBankBalanceHighToLow();
+			
+			Collections.sort(tempList, sortCode);
+			
+			for (Account account1 : tempList) {
+				System.out.println(account1);
+			}
+			 
+		}
+		
+		
+		public static void getAccountsBasedOnBankBalanceLowToHigh(TreeSet<Account> allAccounts)
+		{
+			// Step1 -> convert set to List
+			List<Account> tempList = new ArrayList<>();// or pass as constructor argument
+			tempList.addAll(allAccounts);
+			
+			// Step 2-> create Comparator class Object
+			SortAccountBasedOnBankBalanceLowToHigh sortCode = new SortAccountBasedOnBankBalanceLowToHigh();
+			
+			Collections.sort(tempList, sortCode);
+			
+			for (Account account1 : tempList) {
+				System.out.println(account1);
+			}
+			 
+		}
+		
+	
+
+
+	
+		
+	}
+
+
+package p1;
+
+import java.util.Comparator;
+
+public class SortAccountBasedOnBankBalanceHighToLow implements Comparator<Account> {
+	
+
+		@Override
+		public int compare(Account o1, Account o2) {
+			return o2.getBankBalance() - o1.getBankBalance();
+		}
+		
+		
+
+	}
+
+
+package p1;
+
+import java.util.Comparator;
+
+public class SortAccountBasedOnBankBalanceLowToHigh implements Comparator<Account> {
+	
+
+		@Override
+		public int compare(Account o1, Account o2) {
+			return o1.getBankBalance() - o2.getBankBalance();
+		}
+		
+	}
+
