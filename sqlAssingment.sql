@@ -1,0 +1,87 @@
+select * from instructor;
+insert into instructor values(11,'hema',1000,2005);
+insert into instructor values(18,'dina',2000,2005);
+insert into instructor values(12,'bala',1300,2006);
+insert into instructor values(17,'jaya',1200,2005);
+insert into instructor values(15,'mala',900,2004);
+insert into instructor values(19,'mani',3000,2002);
+insert into instructor values(13,'raja',2500,2006);
+insert into instructor values(16,'uyva',2800,2004);
+insert into instructor values(14,'lata',4100,2007);
+insert into instructor values(10,'vdea',3400,2002);
+insert into instructor values(20,'dinesh',27000,2003);
+insert into instructor values(22,'suda',5000,2002);
+insert into instructor values(24,'frey',3600,2001);
+insert into instructor values(26,'vida',1800,2006);
+insert into instructor values(28,'raje',3500,2004);
+select * from instructor where salary > 2000;
+alter table instructor add technologyName varchar(50);
+alter table instructor add instructorType varchar(50);
+update instructor set technologyName = 'computer' , instructorType = 'programming' where instructorCode = 10;
+update instructor set technologyName = 'java' , instructorType = 'programming' where instructorCode = 13;
+update instructor set technologyName = 'sql' , instructorType = 'database' where instructorCode = 14;
+update instructor set technologyName = 'hardware' , instructorType = 'infra' where instructorCode = 17;
+update instructor set technologyName = 'english' , instructorType = 'communication' where instructorCode = 11;
+update instructor set technologyName = 'oracle' , instructorType = 'database' where instructorCode = 28;
+update instructor set technologyName = 'python' , instructorType = 'programming' where instructorCode = 19;
+update instructor set technologyName = 'network' , instructorType = 'infra' where instructorCode = 26;
+update instructor set technologyName = 'meeting' , instructorType = 'communication' where instructorCode = 20;
+update instructor set technologyName = 'c#' , instructorType = 'programming' where instructorCode = 16;
+update instructor set technologyName = 'project' , instructorType = 'communication' where instructorCode = 18;
+update instructor set technologyName = 'connectors' , instructorType = 'infra' where instructorCode = 12;
+update instructor set technologyName = 'mysql' , instructorType = 'database' where instructorCode = 22;
+update instructor set technologyName = 'c++' , instructorType = 'programming' where instructorCode = 24;
+update instructor set technologyName = 'software' , instructorType = 'infra' where instructorCode = 15;
+select * from instructor where instructorType = 'communication';
+select * from instructor where instructorType = 'database';
+select * from instructor where instructorType = 'infra';
+select * from instructor where instructorType = 'programming';
+SET SQL_SAFE_UPDATES = 0;
+update instructor set salary = (salary + 1000) where instructorType = 'communication';
+select sum(salary) from instructor where instructorType = 'programming';
+select sum(salary) from instructor where instructorType = 'infra';
+select sum(salary) from instructor where instructorType = 'communication';
+select sum(salary) from instructor where instructorType = 'database';
+select * from instructor order by name;
+insert into instructorinfo value (1,11,'hema@gmail.com',4658678879,'english','tamil');
+use cg;
+insert into instructorinfo value (2,12,'hema@gmail.com',4658678879,'english','tamil');
+insert into instructorinfo value (3,10,'hema@gmail.com',4658678879,'spanish','hindi');
+insert into instructorinfo value (4,13,'hema@gmail.com',4658678879,'hindi','german');
+insert into instructorinfo value (5,14,'hema@gmail.com',4658678879,'spain','spanish');
+insert into instructorinfo value (6,15,'hema@gmail.com',4658678879,'spanish','italy');
+insert into instructorinfo value (7,16,'hema@gmail.com',4658678879,'english','spanish');
+insert into instructorinfo value (8,17,'hema@gmail.com',4658678879,'spanish','tamil');
+insert into instructorinfo value (30,18,'hema@gmail.com',4658678879,'german','tamil');
+insert into instructorinfo value (36,19,'hema@gmail.com',4658678879,'hindi','tamil');
+insert into instructorinfo value (31,20,'hema@gmail.com',4658678879,'tamil','spanish');
+insert into instructorinfo value (32,22,'hema@gmail.com',4658678879,'spanish','tamil');
+insert into instructorinfo value (33,24,'hema@gmail.com',4658678879,'english','spanish');
+insert into instructorinfo value (34,26,'hema@gmail.com',4658678879,'spanish','english');
+insert into instructorinfo value (35,28,'hema@gmail.com',4658678879,'english','spanish');
+update instructorinfo set address = 'chennai' where instructorcode=10;
+update instructorinfo set address = 'mumbai' where instructorcode=11;
+update instructorinfo set address = 'bangalore' where instructorcode=12;
+update instructorinfo set address = 'chennai' where instructorcode=13;
+update instructorinfo set address = 'bangalore' where instructorcode=14;
+update instructorinfo set address = 'kerala' where instructorcode=15;
+update instructorinfo set address = 'bangalore' where instructorcode=16;
+update instructorinfo set address = 'chennai' where instructorcode=17;
+update instructorinfo set address = 'mumbai' where instructorcode=18;
+update instructorinfo set address = 'chennai' where instructorcode=19;
+update instructorinfo set address = 'delhi' where instructorcode=20;
+update instructorinfo set address = 'chennai' where instructorcode=22;
+update instructorinfo set address = 'bangalore' where instructorcode=24;
+update instructorinfo set address = 'chennai' where instructorcode=26;
+update instructorinfo set address = 'bangalore' where instructorcode=28;
+select * from instructorinfo where address = 'bangalore';
+select name, instructor.instructorcode from instructor inner join instructorinfo on instructor.instructorcode = instructorinfo.instructorcode; 
+update instructor inner join instructorinfo on instructor.instructorcode = instructorinfo.instructorcode set salary = (salary + 1000) where instructorinfo.firstlanguage='spanish' or instructorinfo.secondlanguage='spanish';
+select instructor.instructorcode, jobstartyear, email, phonenumber from instructor inner join instructorinfo on instructor.instructorcode = instructorinfo.instructorcode where firstlanguage='spanish';
+
+
+
+
+
+
+
